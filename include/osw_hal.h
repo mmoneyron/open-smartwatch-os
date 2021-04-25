@@ -38,6 +38,7 @@ class OswHal {
 
   // Display
   void setBrightness(uint8_t b);
+  uint8_t getBrightness();
   void increaseBrightness(uint8_t v);
   void decreaseBrightness(uint8_t v);
   void displayOff(void);

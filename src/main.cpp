@@ -39,6 +39,7 @@ OswHal *hal = new OswHal();
 #else
 #define NUM_APPS 4
 #endif
+RTC_DATA_ATTR uint8_t lastBrightness = 128;
 RTC_DATA_ATTR uint8_t appPtr = 0;
 OswApp *mainApps[] = {
     new OswAppWatchface(),  //
@@ -105,7 +106,6 @@ void setup() {
   hal->setupSensors();
 
   hal->setupDisplay();
-  hal->setBrightness(128);
 
   xTaskCreatePinnedToCore(core2Worker, "core2Worker", 1000 /*stack*/, NULL /*input*/, 0 /*prio*/,
                           &Core2WorkerTask /*handle*/, 0);
@@ -131,6 +131,8 @@ void loop() {
   if (hal->isWakeupFromTimer()) {
     hal->deepSleep((60-second + 60*(29-minute%30))*1000); // sleep until next half hour
   }
+
+  hal->setBrightness(lastBrightness);
 
   hal->checkButtons();
   hal->updateAccelerometer();
@@ -161,6 +163,7 @@ void loop() {
     lastFlush = millis();
   }
 
+  lastBrightness = hal->getBrightness();
   // auto sleep on first screen
   if (appPtr == 0 && hal->screenOnTime() > 5000) {
     hal->gfx()->fill(rgb565(0, 0, 0));
