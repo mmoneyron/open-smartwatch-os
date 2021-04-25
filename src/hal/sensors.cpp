@@ -20,6 +20,7 @@ float accelT, accelX, accelY, accelZ;
 static uint8_t dev_addr;
 uint8_t act_int;
 uint32_t step_count = 0;
+bool tap = false;
 
 static float lsb_to_ms2(int16_t accel_data, uint8_t g_range, uint8_t bit_width) {
   float accel_ms2;
@@ -150,7 +151,7 @@ int8_t bma400_interface_init(struct bma400_dev *bma400, uint8_t intf) {
 
 // BlueDot_BMA400 bma400 = BlueDot_BMA400();
 void IRAM_ATTR isrStep() { Serial.println("Step"); }
-void IRAM_ATTR isrTap() { Serial.println("Tap"); }
+void IRAM_ATTR isrTap() { Serial.println("Tap"); tap = true; }
 void OswHal::setupSensors() {
   struct bma400_sensor_conf accel_setting[3] = {{}};
   struct bma400_int_enable int_en[3];
@@ -275,3 +276,13 @@ void OswHal::resetStepCount(void) {
 uint32_t OswHal::getStepCount(void) { return step_count; };
 
 uint8_t OswHal::getActivityMode(void) { return act_int; };
+
+// Please keep in mind that when a new tap is detected, this function
+// will be true only on the first call !!!
+bool OswHal::isTapped(void) {
+  if (tap) {
+    tap = 0;
+    return true;
+  }
+  return false;
+}

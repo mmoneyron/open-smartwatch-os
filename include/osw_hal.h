@@ -48,6 +48,7 @@ class OswHal {
   void enableDisplayBuffer();
   unsigned long screenOnTime();
   unsigned long screenOffTime();
+  void resetScreenOnSince();
 
   Arduino_TFT* getArduino_TFT(void);
   ArduinoGraphics2DCanvas* getCanvas(void);
@@ -108,6 +109,7 @@ class OswHal {
   uint32_t getStepCount(void);
   void resetStepCount(void);
   uint8_t getActivityMode(void);
+  bool isTapped(void);
 
   // Time
   void updateTimeViaNTP(long gmtOffset_sec, int daylightOffset_sec, uint32_t timeout_sec);

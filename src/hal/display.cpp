@@ -101,3 +101,5 @@ void OswHal::decreaseBrightness(uint8_t v) {
   }
   setBrightness(_brightness);
 };
+
+void OswHal::resetScreenOnSince(void) { _screenOnSince = millis(); };

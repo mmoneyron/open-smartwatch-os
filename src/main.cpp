@@ -135,6 +135,11 @@ void loop() {
   hal->checkButtons();
   hal->updateAccelerometer();
 
+  // reset auto-sleep delay
+  if (hal->isTapped()) {
+    hal->resetScreenOnSince();
+  }
+
   // handle long click to sleep
   if (hal->btn1Down() >= BTN_1_SLEEP_TIMEOUT) {
     hal->getCanvas()->getGraphics2D()->fill(rgb565(0, 0, 0));
