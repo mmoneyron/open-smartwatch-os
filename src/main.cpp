@@ -15,6 +15,7 @@
 // #include "./apps/_experiments/runtime_test.h"
 #include "./apps/main/stopwatch.h"
 #include "./apps/main/watchface.h"
+#include "./apps/main/histogram.h"
 #include "./apps/tools/print_debug.h"
 #include "./apps/tools/time_from_web.h"
 #include "./apps/tools/water_level.h"
@@ -40,12 +41,15 @@ OswHal *hal = new OswHal();
 #define NUM_APPS 4
 #endif
 RTC_DATA_ATTR uint8_t appPtr = 0;
+
+RTC_DATA_ATTR uint16_t week_steps[7] = {100, 0, 0, 0, 0, 50, 0};
+
 OswApp *mainApps[] = {
     new OswAppWatchface(),  //
 #if defined(GPS_EDITION)
     new OswAppMap(),  //
 #endif
-    // new OswAppPrintDebug(),   //
+    new OswAppHistogram(),   //
     new OswAppStopWatch(),    //
     new OswAppTimeFromWeb(),  //
     new OswAppWaterLevel(),    //
@@ -106,6 +110,7 @@ void setup() {
 
   hal->setupDisplay();
   hal->setBrightness(128);
+  hal->setWeekSteps(week_steps);
 
   xTaskCreatePinnedToCore(core2Worker, "core2Worker", 1000 /*stack*/, NULL /*input*/, 0 /*prio*/,
                           &Core2WorkerTask /*handle*/, 0);
@@ -121,6 +126,8 @@ void loop() {
   uint32_t minute = 0;
   uint32_t hour = 0;
 
+  week_steps[hal->getDayOfWeek()] = hal->getStepCount();
+  hal->setWeekSteps(week_steps);
   hal->getLocalTime(&hour, &minute, &second);
   if ((hour == 0) && (minute == 0) && (second == 0)) {
     hal->resetStepCount();
