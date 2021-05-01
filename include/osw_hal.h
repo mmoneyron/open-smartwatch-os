@@ -109,6 +109,10 @@ class OswHal {
   void resetStepCount(void);
   uint8_t getActivityMode(void);
 
+  // Fitness
+  void setWeekSteps(uint16_t *wsteps);
+  void getWeekSteps(uint16_t *wsteps);
+
   // Time
   void updateTimeViaNTP(long gmtOffset_sec, int daylightOffset_sec, uint32_t timeout_sec);
   void setUTCTime(long);
@@ -145,6 +149,7 @@ class OswHal {
   bool _hasGPS = false;
   bool _debugGPS = false;
   bool _requestFlush = false;
+  uint16_t _week_steps[7];
 };
 
 #endif
