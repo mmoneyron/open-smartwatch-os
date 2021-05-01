@@ -116,6 +116,7 @@ class OswHal {
   void getUTCTime(uint32_t* hour, uint32_t* minute, uint32_t* second);
   long getLocalTime(void);
   void getLocalTime(uint32_t* hour, uint32_t* minute, uint32_t* second);
+  uint8_t getDayOfWeek();
 
   // RF
   MiniWifi* getWiFi(void);

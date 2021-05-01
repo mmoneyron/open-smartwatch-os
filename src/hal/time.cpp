@@ -59,6 +59,11 @@ void OswHal::getLocalTime(uint32_t *hour, uint32_t *minute, uint32_t *second) {
   *minute = d.Minute();
   *second = d.Second();
 }
+uint8_t OswHal::getDayOfWeek() {
+  RtcDateTime d = RtcDateTime();
+  d.InitWithEpoch32Time(getLocalTime());
+  return d.DayOfWeek();
+}
 
 void OswHal::updateTimeViaNTP(long gmtOffset_sec, int daylightOffset_sec, uint32_t timeout_sec) {
   long start = millis();
