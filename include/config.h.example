@@ -21,4 +21,6 @@
 
 #define BLE_DEVICE_NAME DEVICE_NAME
 
+#define STEPS_GOAL 1000
+
 #endif
